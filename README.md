@@ -1,5 +1,3 @@
-# DeFi-Yield-Optimizer
-
 # DeFi Yield Comparison Tool
 
 A comprehensive tool for comparing yields across DeFi platforms, calculating impermanent loss risks, and determining optimal farming strategies.
