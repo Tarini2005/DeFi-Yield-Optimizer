@@ -106,4 +106,28 @@ const YieldComparison: React.FC<YieldComparisonProps> = ({ selectedProtocols }) 
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <img 
-                      src={selectedProtocols
+                      src={selectedProtocols.find(p => p.id === data.protocolId)?.logoUrl} 
+                      alt={data.protocolName} 
+                      style={{ width: '20px', height: '20px' }} 
+                    />
+                    {data.protocolName}
+                  </div>
+                </td>
+                <td>{data.assetName}</td>
+                <td>
+                  <span className={`yield-value ${getYieldClassName(data.apy)}`}>
+                    {data.apy.toFixed(2)}%
+                  </span>
+                </td>
+                <td>${(data.tvl / 1000000).toFixed(2)}M</td>
+                <td>{data.riskLevel}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
+
+export default YieldComparison;
