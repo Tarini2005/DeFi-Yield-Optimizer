@@ -3,9 +3,7 @@ import { YieldData, HistoricalYield, ProjectedReturn, AssetType } from '../utils
 
 const API_BASE_URL = '/api';
 
-/**
- * Fetch yield data from the API
- */
+
 export const fetchYieldData = async (
   protocolIds: string[],
   assetType: AssetType = 'stablecoin',
@@ -27,9 +25,6 @@ export const fetchYieldData = async (
   }
 };
 
-/**
- * Fetch historical yield data for charts
- */
 export const fetchHistoricalYields = async (
   protocolIds: string[],
   timeframe: string = '90d',
@@ -51,9 +46,7 @@ export const fetchHistoricalYields = async (
   }
 };
 
-/**
- * Fetch projected return data for different scenarios
- */
+
 export const fetchProjectedReturns = async (
   protocolIds: string[],
   scenario: string = 'base',
