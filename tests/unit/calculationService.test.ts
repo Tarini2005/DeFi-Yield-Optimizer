@@ -11,15 +11,13 @@ describe('Impermanent Loss Calculator', () => {
   test('should calculate correct impermanent loss for 50% price increase', () => {
     const result = calculateImpermanentLoss(1, 2000, 0.5);
     
-    // With a 50% price increase, IL should be about 2%
     expect(result.impermanentLossPercent).toBeCloseTo(2.02, 1);
     expect(result.holdValue).toBeGreaterThan(result.lpValue);
   });
   
   test('should calculate correct impermanent loss for 50% price decrease', () => {
     const result = calculateImpermanentLoss(1, 2000, -0.5);
-    
-    // With a 50% price decrease, IL should be about 2%
+
     expect(result.impermanentLossPercent).toBeCloseTo(2.02, 1);
     expect(result.holdValue).toBeGreaterThan(result.lpValue);
   });
@@ -27,7 +25,7 @@ describe('Impermanent Loss Calculator', () => {
   test('should calculate severe impermanent loss for extreme price changes', () => {
     const result = calculateImpermanentLoss(1, 2000, 4);
     
-    // With a 400% price increase, IL should be significant (>5%)
+
     expect(result.impermanentLossPercent).toBeGreaterThan(5);
   });
   
@@ -35,24 +33,21 @@ describe('Impermanent Loss Calculator', () => {
     const result1 = calculateImpermanentLoss(1, 2000, 0.5);
     const result2 = calculateImpermanentLoss(2, 4000, 0.5);
     
-    // Scaling the inputs with the same price change should give the same IL percentage
     expect(result1.impermanentLossPercent).toBeCloseTo(result2.impermanentLossPercent, 5);
   });
   
   test('should return correct token amounts after price change', () => {
     const token1Amount = 1;
     const token2Amount = 2000;
-    const priceChangeRatio = 0.5; // 50% increase
+    const priceChangeRatio = 0.5; 
     
     const result = calculateImpermanentLoss(token1Amount, token2Amount, priceChangeRatio);
     
-    // Product of token amounts should be constant (k = x * y)
     const initialK = token1Amount * token2Amount;
     const newK = result.token1NewAmount * result.token2NewAmount;
     
     expect(newK).toBeCloseTo(initialK, 5);
     
-    // New price should reflect the price change
     const initialPrice = token2Amount / token1Amount;
     const newPrice = initialPrice * (1 + priceChangeRatio);
     expect(result.newPrice).toBeCloseTo(newPrice, 5);
