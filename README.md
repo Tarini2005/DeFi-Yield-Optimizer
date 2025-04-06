@@ -1,6 +1,57 @@
 # DeFi-Yield-Optimizer
 
-Build a tool that compares yields across DeFi platforms
-Calculate impermanent loss risks and optimal farming strategies
-Create visualizations of projected returns under different scenarios
-Technologies: JavaScript/TypeScript, Web3.js, DeFi protocol APIs
+# DeFi Yield Comparison Tool
+
+A comprehensive tool for comparing yields across DeFi platforms, calculating impermanent loss risks, and determining optimal farming strategies.
+
+## Features
+
+- Compare yields across multiple DeFi platforms in real-time
+- Calculate impermanent loss for liquidity positions
+- Visualize projected returns under different market scenarios
+- Optimize farming strategies based on risk tolerance and time horizon
+- Interactive dashboard with customizable parameters
+
+## Technology Stack
+
+- TypeScript/JavaScript
+- React for the frontend
+- Web3.js for blockchain interactions
+- DeFi protocol APIs (Aave, Compound, Uniswap, etc.)
+- Chart.js for data visualization
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/defi-yield-tool.git
+cd defi-yield-tool
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create a `.env` file based on `.env.example` and add your API keys.
+
+4. Start the development server:
+```bash
+npm run dev
+```
+
+## Usage
+
+See the [usage guide](./docs/usage.md) for detailed instructions.
+
+## API Documentation
+
+Refer to the [API documentation](./docs/api.md) for information on available endpoints and data formats.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
