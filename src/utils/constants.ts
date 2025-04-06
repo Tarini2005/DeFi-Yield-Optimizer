@@ -266,25 +266,24 @@ export const MOCK_DATA = {
   ] as ProjectedReturn[]
 };
 
-// Helper function to generate 365 days of historical data
 function generateHistoricalData(assetName: string, assetType: string, currentYield: number, volatility: number) {
   const data = [];
   const now = new Date();
   let yield_value = currentYield;
   
-  // Generate 365 days of data
+
   for (let i = 365; i >= 0; i--) {
     const date = new Date(now);
     date.setDate(date.getDate() - i);
     
-    // Random walk with mean reversion
+
     const randomChange = (Math.random() - 0.5) * volatility;
     yield_value = yield_value + randomChange;
     
-    // Mean reversion - pull back towards current yield
+
     yield_value = yield_value + (currentYield - yield_value) * 0.05;
     
-    // Ensure yield is not negative
+   
     if (yield_value < 0) yield_value = 0.01;
     
     data.push({
@@ -530,4 +529,4 @@ function generateHistoricalData(assetName: string, assetType: string, currentYie
   ] as ProjectedReturn[]
 };
 
-// Helper function to generate 365 days
+
