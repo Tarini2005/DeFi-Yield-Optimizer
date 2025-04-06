@@ -37,19 +37,3 @@ npm install
 ```bash
 npm run dev
 ```
-
-## Usage
-
-See the [usage guide](./docs/usage.md) for detailed instructions.
-
-## API Documentation
-
-Refer to the [API documentation](./docs/api.md) for information on available endpoints and data formats.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
