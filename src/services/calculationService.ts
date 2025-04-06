@@ -1,35 +1,31 @@
 import { YieldData, ImpermanentLossResult, OptimalStrategy, RiskLevel } from '../utils/types';
 import { fetchYieldData } from './dataService';
 
-/**
- * Calculate impermanent loss for a liquidity position
- */
+
 export const calculateImpermanentLoss = (
   token1Amount: number,
   token2Amount: number,
-  priceChangeRatio: number // e.g., 0.5 for 50% price decrease, 2 for 100% price increase
+  priceChangeRatio: number
 ): ImpermanentLossResult => {
-  // Initial values
   const initialPrice = token2Amount / token1Amount;
   const initialValue = token1Amount * initialPrice + token2Amount;
   
-  // Calculate constant product (k)
+
   const k = token1Amount * token2Amount;
   
-  // New price after change
+
   const newPrice = initialPrice * (1 + priceChangeRatio);
-  
-  // Calculate new token amounts while maintaining constant product k
+
   const newToken1Amount = Math.sqrt(k / newPrice);
   const newToken2Amount = Math.sqrt(k * newPrice);
   
-  // Value if held (not provided as LP)
+
   const holdValue = token1Amount * newPrice + token2Amount;
   
-  // Value as LP
+
   const lpValue = newToken1Amount * newPrice + newToken2Amount;
   
-  // Calculate impermanent loss
+
   const impermanentLoss = lpValue - holdValue;
   const impermanentLossPercent = (impermanentLoss / holdValue) * 100;
   
@@ -48,9 +44,7 @@ export const calculateImpermanentLoss = (
   };
 };
 
-/**
- * Calculate optimal farming strategy based on user inputs
- */
+
 export const calculateOptimalStrategy = async (
   protocolIds: string[],
   investmentAmount: number,
@@ -58,25 +52,23 @@ export const calculateOptimalStrategy = async (
   riskTolerance: RiskLevel
 ): Promise<OptimalStrategy> => {
   try {
-    // Get yield data for the selected protocols
+
     const yieldData = await fetchYieldData(protocolIds);
-    
-    // Filter and rank opportunities based on risk tolerance
+
     const opportunities = rankOpportunities(yieldData, riskTolerance);
     
-    // Calculate allocation based on the Modern Portfolio Theory (simplified)
+  
     const allocations = calculateAllocations(opportunities, investmentAmount, riskTolerance);
     
-    // Calculate expected return based on allocations
     const expectedReturn = allocations.reduce(
       (sum, allocation) => sum + (allocation.expectedApy * allocation.percentage) / 100,
       0
     );
     
-    // Calculate projected value after the time horizon
+
     const projectedValue = investmentAmount * Math.pow(1 + expectedReturn / 100, timeHorizon / 12);
     
-    // Generate strategy insights based on the allocations
+
     const insights = generateStrategyInsights(allocations, riskTolerance, timeHorizon);
     
     return {
@@ -92,14 +84,12 @@ export const calculateOptimalStrategy = async (
   }
 };
 
-/**
- * Rank yield opportunities based on risk tolerance
- */
+
 const rankOpportunities = (
   yieldData: YieldData[],
   riskTolerance: RiskLevel
 ): YieldData[] => {
-  // Define weights for APY and risk based on user's risk tolerance
+  
   let apyWeight, riskWeight;
   
   switch (riskTolerance) {
@@ -124,7 +114,7 @@ const rankOpportunities = (
       riskWeight = 0.5;
   }
   
-  // Convert risk level string to numeric value
+
   const riskMap: Record<string, number> = {
     'very low': 1,
     'low': 2,
@@ -133,11 +123,10 @@ const rankOpportunities = (
     'very high': 5
   };
   
-  // Calculate score for each opportunity
   const scoredOpportunities = yieldData.map(opportunity => {
     const riskScore = riskMap[opportunity.riskLevel.toLowerCase()] || 3;
-    const normalizedRiskScore = (5 - riskScore) / 4; // Invert so lower risk = higher score
-    const normalizedApyScore = Math.min(opportunity.apy / 30, 1); // Cap at 30% APY
+    const normalizedRiskScore = (5 - riskScore) / 4; 
+    const normalizedApyScore = Math.min(opportunity.apy / 30, 1); 
     
     const score = (apyWeight * normalizedApyScore + riskWeight * normalizedRiskScore);
     
@@ -151,9 +140,7 @@ const rankOpportunities = (
   return scoredOpportunities.sort((a, b) => (b as any).score - (a as any).score);
 };
 
-/**
- * Calculate allocations based on ranked opportunities
- */
+
 const calculateAllocations = (
   rankedOpportunities: YieldData[],
   investmentAmount: number,
@@ -165,7 +152,7 @@ const calculateAllocations = (
   percentage: number;
   expectedApy: number;
 }> => {
-  // Number of assets to include based on risk tolerance
+
   let numAssets;
   switch (riskTolerance) {
     case 'low':
@@ -184,27 +171,27 @@ const calculateAllocations = (
       numAssets = Math.min(4, rankedOpportunities.length);
   }
   
-  // Take top N assets
+
   const selectedOpportunities = rankedOpportunities.slice(0, numAssets);
   
-  // Apply allocation strategy based on risk tolerance
+
   let allocations;
   
   switch (riskTolerance) {
     case 'low':
-      // More balanced allocation for low risk
+
       allocations = equalWeight(selectedOpportunities);
       break;
     case 'moderate':
-      // Mix of equal weight and score-based weight
+
       allocations = mixedWeight(selectedOpportunities);
       break;
     case 'high':
-      // Higher weights toward higher scores
+
       allocations = scoreWeight(selectedOpportunities);
       break;
     case 'aggressive':
-      // Concentrated allocation to highest yield opportunities
+
       allocations = concentratedWeight(selectedOpportunities);
       break;
     default:
@@ -214,9 +201,7 @@ const calculateAllocations = (
   return allocations;
 };
 
-/**
- * Equal weight allocation strategy
- */
+
 const equalWeight = (opportunities: YieldData[]): any[] => {
   const percentage = 100 / opportunities.length;
   
@@ -229,17 +214,15 @@ const equalWeight = (opportunities: YieldData[]): any[] => {
   }));
 };
 
-/**
- * Mixed weight allocation strategy (50% equal, 50% based on score)
- */
+
 const mixedWeight = (opportunities: YieldData[]): any[] => {
-  // Calculate total score
+
   const totalScore = opportunities.reduce((sum, opp) => sum + (opp as any).score, 0);
   
-  // Base allocation (50% equal weight)
+
   const basePercentage = 50 / opportunities.length;
   
-  // Remaining 50% allocated by score
+
   return opportunities.map(opportunity => {
     const scoreBasedPercentage = 50 * ((opportunity as any).score / totalScore);
     
@@ -253,14 +236,12 @@ const mixedWeight = (opportunities: YieldData[]): any[] => {
   });
 };
 
-/**
- * Score-based weight allocation strategy
- */
+
 const scoreWeight = (opportunities: YieldData[]): any[] => {
-  // Calculate total score
+
   const totalScore = opportunities.reduce((sum, opp) => sum + (opp as any).score, 0);
   
-  // Allocate based on score
+
   return opportunities.map(opportunity => ({
     protocolId: opportunity.protocolId,
     protocolName: opportunity.protocolName,
@@ -270,20 +251,17 @@ const scoreWeight = (opportunities: YieldData[]): any[] => {
   }));
 };
 
-/**
- * Concentrated weight allocation strategy (highest yield gets more)
- */
 const concentratedWeight = (opportunities: YieldData[]): any[] => {
-  // Exponentially weight scores to concentrate on highest performers
+
   const exponentiatedScores = opportunities.map(opp => ({
     ...opp,
     expScore: Math.pow((opp as any).score, 2)
   }));
   
-  // Calculate total exponential score
+
   const totalExpScore = exponentiatedScores.reduce((sum, opp) => sum + opp.expScore, 0);
   
-  // Allocate based on exponential score
+
   return exponentiatedScores.map(opportunity => ({
     protocolId: opportunity.protocolId,
     protocolName: opportunity.protocolName,
@@ -293,9 +271,7 @@ const concentratedWeight = (opportunities: YieldData[]): any[] => {
   }));
 };
 
-/**
- * Generate insights based on the calculated strategy
- */
+
 const generateStrategyInsights = (
   allocations: any[],
   riskTolerance: RiskLevel,
@@ -303,10 +279,8 @@ const generateStrategyInsights = (
 ): string => {
   let insights = '';
   
-  // Get top allocation
   const topAllocation = allocations.sort((a, b) => b.percentage - a.percentage)[0];
   
-  // Generate insights based on risk tolerance
   switch (riskTolerance) {
     case 'low':
       insights = `This conservative strategy prioritizes capital preservation by diversifying across ${allocations.length} assets. The largest allocation (${topAllocation.percentage.toFixed(1)}%) is to ${topAllocation.protocolName}'s ${topAllocation.assetName}, which offers a balance of stability and yield. This strategy aims to minimize exposure to protocol risk and market volatility over your ${timeHorizon}-month investment horizon.`;
