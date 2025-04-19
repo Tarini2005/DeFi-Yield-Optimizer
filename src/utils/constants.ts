@@ -14,6 +14,38 @@ export const PROTOCOL_APIS = {
   anchor: 'https://api.anchorprotocol.com'
 };
 
+// Helper function to generate historical data
+function generateHistoricalData(assetName: string, assetType: string, currentYield: number, volatility: number) {
+  const data = [];
+  const now = new Date();
+  let yield_value = currentYield;
+  
+  // Generate 365 days of data
+  for (let i = 365; i >= 0; i--) {
+    const date = new Date(now);
+    date.setDate(date.getDate() - i);
+    
+    // Random walk with mean reversion
+    const randomChange = (Math.random() - 0.5) * volatility;
+    yield_value = yield_value + randomChange;
+    
+    // Mean reversion - pull back towards current yield
+    yield_value = yield_value + (currentYield - yield_value) * 0.05;
+    
+    // Ensure yield is not negative
+    if (yield_value < 0) yield_value = 0.01;
+    
+    data.push({
+      date: date.toISOString().split('T')[0],
+      yield: yield_value,
+      assetName,
+      assetType
+    });
+  }
+  
+  return data;
+}
+
 // Mock data for development and testing
 export const MOCK_DATA = {
   // Protocol data
@@ -265,37 +297,3 @@ export const MOCK_DATA = {
     }
   ] as ProjectedReturn[]
 };
-
-function generateHistoricalData(assetName: string, assetType: string, currentYield: number, volatility: number) {
-  const data = [];
-  const now = new Date();
-  let yield_value = currentYield;
-  
-
-  for (let i = 365; i >= 0; i--) {
-    const date = new Date(now);
-    date.setDate(date.getDate() - i);
-    
-
-    const randomChange = (Math.random() - 0.5) * volatility;
-    yield_value = yield_value + randomChange;
-    
-
-    yield_value = yield_value + (currentYield - yield_value) * 0.05;
-    
-   
-    if (yield_value < 0) yield_value = 0.01;
-    
-    data.push({
-      date: date.toISOString().split('T')[0],
-      yield: yield_value,
-      assetName,
-      assetType
-    });
-  }
-  
-  return data;
-}
-};
-
-
