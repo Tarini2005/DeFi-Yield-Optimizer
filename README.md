@@ -22,8 +22,8 @@ A comprehensive tool for comparing yields across DeFi platforms, calculating imp
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/Tarini2005/defi-yield-tool.git
-cd defi-yield-tool
+git clone https://github.com/Tarini2005/DeFi-Yield-Optimizer.git
+cd DeFi-Yield-Optimizer
 ```
 
 2. Install dependencies:
