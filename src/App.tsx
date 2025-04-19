@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import ProtocolSelector from './components/ProtocolSelector';
-import { fetchSupportedProtocols } from './services/protocolService';
+import { getProtocols as fetchSupportedProtocols } from './services/protocolService';
 import { Protocol } from './utils/types';
 
 const App: React.FC = () => {
