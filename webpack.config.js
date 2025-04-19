@@ -52,7 +52,6 @@ module.exports = (env, argv) => {
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html',
-        favicon: './src/assets/images/favicon.ico'
       }),
       new DotenvWebpackPlugin({
         systemvars: true
