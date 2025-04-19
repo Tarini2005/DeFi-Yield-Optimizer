@@ -18,9 +18,9 @@ export const getYields = async (
 ): Promise<YieldData[]> => {
   try {
 
-    const yieldData = MOCK_DATA.yields.filter(yield => 
-      protocolIds.includes(yield.protocolId) && 
-      yield.assetType === assetType
+    const yieldData = MOCK_DATA.yields.filter(yieldItem => 
+      protocolIds.includes(yieldItem.protocolId) && 
+      yieldItem.assetType === assetType
     );
     
     return yieldData;
