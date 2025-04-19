@@ -295,7 +295,8 @@ function generateHistoricalData(assetName: string, assetType: string, currentYie
   }
   
   return data;
-}stablecoin', apy: 3.9, tvl: 487000000, riskLevel: 'Low' },
+}
+stablecoin', apy: 3.9, tvl: 487000000, riskLevel: 'Low' },
     { protocolId: 'aave', protocolName: 'Aave', assetName: 'DAI', assetType: 'stablecoin', apy: 4.1, tvl: 498000000, riskLevel: 'Low' },
     { protocolId: 'compound', protocolName: 'Compound', assetName: 'DAI', assetType: 'stablecoin', apy: 3.8, tvl: 423000000, riskLevel: 'Low' },
     { protocolId: 'curve', protocolName: 'Curve', assetName: '3pool', assetType: 'stablecoin', apy: 5.3, tvl: 732000000, riskLevel: 'Low' },
